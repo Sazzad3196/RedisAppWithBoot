@@ -14,13 +14,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class User implements Serializable{
 	
 	private static final long serialVersionUID = 7156526077883281623L;
 
     @Id
-    @SequenceGenerator(name = "SEQ_GEN", sequenceName = "SEQ_USER", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GEN")
     private int id;
     private String name;

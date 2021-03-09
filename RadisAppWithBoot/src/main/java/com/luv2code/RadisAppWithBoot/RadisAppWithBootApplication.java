@@ -5,16 +5,43 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
+import com.luv2code.RadisAppWithBoot.entity.Customer;
 import com.luv2code.RadisAppWithBoot.entity.User;
 import com.luv2code.RadisAppWithBoot.repository.UserRepository;
+
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-@EnableCaching
-public class RadisAppWithBootApplication implements CommandLineRunner{
+public class RadisAppWithBootApplication {
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+		return new JedisConnectionFactory();
+	}
+	
+	@Bean
+	RedisTemplate<String, Map<Integer, Customer>> redisTemplate() {
+		RedisTemplate<String, Map<Integer, Customer>> redisTemplate = new RedisTemplate<String, Map<Integer,Customer>>();
+		redisTemplate.setConnectionFactory(jedisConnectionFactory());
+		return redisTemplate;
+	}
+	
+	public static void main(String[] args) {
+		SpringApplication.run(RadisAppWithBootApplication.class, args);
+	}
+
+}
+
+ /* 
+ @SpringBootApplication
+ @EnableCaching
+ public class RadisAppWithBootApplication implements CommandLineRunner{
 
 	public static void main(String[] args) {
 		SpringApplication.run(RadisAppWithBootApplication.class, args);
@@ -42,6 +69,6 @@ public class RadisAppWithBootApplication implements CommandLineRunner{
 		userRepository.save(joy);
 		
 		LOG.info("Done All Saving! {}", userRepository.findAll());
-	}
+	} 
 
-}
+} */
