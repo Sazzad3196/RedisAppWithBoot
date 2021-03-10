@@ -22,9 +22,42 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 	@Override
 	@Transactional
 	public List<Customer> getAllCustomer() {
+		
 		Query query = entityManager.createQuery("from Customer", Customer.class);
 		List<Customer> CustomerList = query.getResultList();
 		return CustomerList;
+		
+	}
+
+	@Override
+	@Transactional
+	public Customer updateCustomer(Customer tempCustomer) {
+		
+		entityManager.merge(tempCustomer);
+		Customer customer = entityManager.find(Customer.class, tempCustomer.getId());
+		return customer;
+		
+	}
+
+	@Override
+	@Transactional
+	public Customer getCustomer(int id) {
+		
+		Customer customer = entityManager.find(Customer.class, id);
+		return customer;
+		
+	}
+
+	@Override
+	@Transactional
+	public Customer deleteCustomer(int id) {
+		Customer customer = entityManager.find(Customer.class, id);
+		if(customer != null) {
+			entityManager.remove(customer);
+			return customer;
+		}
+		
+		return null;
 	}
 
 }

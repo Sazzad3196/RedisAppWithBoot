@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 import com.luv2code.RadisAppWithBoot.entity.Customer;
 import com.luv2code.RadisAppWithBoot.entity.User;
@@ -26,9 +28,10 @@ public class RadisAppWithBootApplication {
 	}
 	
 	@Bean
-	RedisTemplate<String, Map<Integer, Customer>> redisTemplate() {
-		RedisTemplate<String, Map<Integer, Customer>> redisTemplate = new RedisTemplate<String, Map<Integer,Customer>>();
+	RedisTemplate<String, Customer> redisTemplate() {
+		RedisTemplate<String, Customer> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(jedisConnectionFactory());
+		redisTemplate.setValueSerializer(new GenericToStringSerializer<Customer>(Customer.class));
 		return redisTemplate;
 	}
 	
